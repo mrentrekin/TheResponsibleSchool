@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Responsible School — A School Management Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1a1a1a;
+    --slate:     #2e3a47;
+    --warm:      #f7f4ef;
+    --rule:      #d8d2c8;
+    --accent:    #c04a2d;
+    --accent2:   #4a7c8e;
+    --gold:      #b89750;
+    --mid:       #6b7280;
+    --white:     #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--warm);
+  }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0d0d0d;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 52px;
+  }
+  .nav-brand {
+    font-family: 'DM Mono', monospace; font-size: 0.75rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+  }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+
+  /* HERO */
+  .hero {
+    background: #0d0d0d; color: var(--white);
+    padding: 7rem 2rem 6rem; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5.2rem); font-weight: 900;
+    line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 1.5rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    font-size: 1.15rem; font-weight: 300; color: rgba(255,255,255,0.75);
+    max-width: 560px; margin: 0 auto 3.5rem; line-height: 1.6;
+  }
+  .hero-author {
+    font-family: 'Inter', sans-serif; font-size: 1rem;
+    font-weight: 300; letter-spacing: 0.04em;
+    color: #ffffff; margin-bottom: 3rem;
+  }
+
+  /* TIER STRIP */
+  .tier-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    max-width: 900px; margin: 0 auto;
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 4px;
+    overflow: hidden;
+  }
+  .tier-cell {
+    padding: 1.4rem 1.2rem;
+    border-right: 1px solid rgba(255,255,255,0.1); text-align: center;
+  }
+  .tier-cell:last-child { border-right: none; }
+  .tier-label {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); display: block; margin-bottom: 0.35rem;
+  }
+  .tier-name {
+    font-family: 'Playfair Display', serif; font-size: 1.05rem;
+    font-weight: 700; color: #fff; display: block; margin-bottom: 0.5rem;
+  }
+  .tier-desc { font-size: 0.72rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+  section {
+    padding: 5rem 2rem; max-width: 860px; margin: 0 auto;
+  }
+  section + section { border-top: 1px solid var(--rule); }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+    line-height: 1.1; letter-spacing: -0.02em;
+    color: var(--slate); margin-bottom: 1.5rem;
+  }
+  h2 em { font-style: italic; color: var(--accent); }
+
+  h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.3rem;
+    font-weight: 700; color: var(--slate); margin: 2.5rem 0 0.75rem;
+  }
+
+  p { color: #3a3a3a; margin-bottom: 1rem; font-size: 1rem; line-height: 1.75; }
+  p:last-child { margin-bottom: 0; }
+
+  .lead { font-size: 1.15rem; font-weight: 300; color: var(--slate); line-height: 1.7; margin-bottom: 1.5rem; }
+
+  .principle {
+    background: #0d0d0d; color: #fff; border-radius: 8px;
+    padding: 2rem 2.5rem; margin: 2.5rem 0;
+    font-size: 1rem; line-height: 1.7; font-weight: 300;
+  }
+  .principle strong {
+    font-weight: 600; color: var(--gold); font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    display: block; margin-bottom: 0.6rem;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--accent); padding: 0.75rem 1.5rem;
+    margin: 1.5rem 0; font-style: italic; color: var(--slate); font-size: 1rem;
+  }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 2rem 0; }
+  .card { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 1.5rem; }
+  .card-num {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em;
+    color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 0.5rem;
+  }
+  .card h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--slate); margin-bottom: 0.5rem; }
+  .card p { font-size: 0.88rem; color: var(--mid); margin: 0; line-height: 1.6; }
+
+  .tab-nav { display: flex; gap: 0; border: 1px solid var(--rule); border-radius: 6px 6px 0 0; overflow: hidden; margin: 2rem 0 0; }
+  .tab-btn {
+    flex: 1; background: #fff; border: none; border-right: 1px solid var(--rule);
+    padding: 0.85rem 0.5rem; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--mid); cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+  }
+  .tab-btn:last-child { border-right: none; }
+  .tab-btn.active { background: var(--slate); color: #fff; }
+  .tab-btn:hover:not(.active) { background: var(--warm); color: var(--slate); }
+  .tab-panels { border: 1px solid var(--rule); border-top: none; border-radius: 0 0 6px 6px; background: #fff; margin-bottom: 2rem; }
+  .tab-panel { display: none; padding: 2rem; }
+  .tab-panel.active { display: block; }
+  .tab-panel h4 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--slate); margin: 1.25rem 0 0.4rem; }
+  .tab-panel h4:first-child { margin-top: 0; }
+  .tab-panel p { font-size: 0.9rem; color: #444; margin-bottom: 0; }
+
+  .matrix { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.85rem; }
+  .matrix th { background: var(--slate); color: #fff; padding: 0.8rem 1rem; text-align: left; font-weight: 500; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .matrix th:first-child { width: 140px; }
+  .matrix td { padding: 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.55; color: #3a3a3a; }
+  .matrix tr:last-child td { border-bottom: none; }
+  .matrix tr:nth-child(even) td { background: rgba(247,244,239,0.6); }
+  .matrix .tier-tag { font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; white-space: nowrap; }
+
+  .research-list { list-style: none; margin: 1.5rem 0; }
+  .research-list li { padding: 1.25rem 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 160px 1fr; gap: 1.5rem; align-items: start; }
+  .research-list li:last-child { border-bottom: none; }
+  .research-author { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--accent2); font-weight: 500; line-height: 1.4; }
+  .research-text { font-size: 0.9rem; color: #444; line-height: 1.6; }
+  .research-text strong { color: var(--slate); }
+
+  .refs-list { list-style: none; columns: 2; column-gap: 2rem; margin-top: 1.5rem; }
+  .refs-list li { font-size: 0.82rem; color: var(--mid); margin-bottom: 0.85rem; break-inside: avoid; line-height: 1.55; }
+  .refs-list em { font-style: italic; }
+
+  footer {
+    background: #0d0d0d; color: rgba(255,255,255,0.45);
+    text-align: center; padding: 2.5rem 2rem;
+    font-size: 0.78rem; letter-spacing: 0.06em;
+  }
+  footer strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+
+  @media (max-width: 640px) {
+    .strat-card { flex: 0 0 230px; }
+  }
+
+  @media (max-width: 640px) {
+    .tier-strip { grid-template-columns: 1fr 1fr; }
+    .tier-cell:nth-child(2) { border-right: none; }
+    .tier-cell:nth-child(3), .tier-cell:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.1); }
+    .refs-list { columns: 1; }
+    .research-list li { grid-template-columns: 1fr; gap: 0.4rem; }
+    .matrix { font-size: 0.78rem; }
+    .matrix th:first-child { width: 100px; }
+    nav .nav-links { display: none; }
+  }
+
+  /* ── INLINE STRATEGY SCROLL STRIPS ── */
+  .strat-strip-label {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin: 3rem 0 0.75rem; display: block;
+  }
+  .strat-strip {
+    display: flex; gap: 1rem;
+    overflow-x: auto;
+    padding: 0.25rem 0 1.25rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
+  }
+  .strat-strip::-webkit-scrollbar { height: 4px; }
+  .strat-strip::-webkit-scrollbar-track { background: transparent; }
+  .strat-strip::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+  .sc {
+    flex: 0 0 240px; scroll-snap-align: start;
+    background: #fff; border: 1px solid var(--rule);
+    border-radius: 10px; padding: 1.25rem 1.25rem 1.4rem;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .sc:hover { border-color: var(--accent2); }
+  .sc-num {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--mid);
+  }
+  .sc h4 {
+    font-family: 'Playfair Display', serif; font-size: 0.95rem;
+    font-weight: 700; color: var(--slate); line-height: 1.3;
+    margin: 0;
+  }
+  .sc p {
+    font-size: 0.82rem; color: var(--mid);
+    line-height: 1.55; margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">The Responsible School</span>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#school">School</a></li>
+    <li><a href="#admin">Administrators</a></li>
+    <li><a href="#teachers">Teachers</a></li>
+    <li><a href="#students">Students</a></li>
+    <li><a href="#matrix">Matrix</a></li>
+    <li><a href="#research">Research</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">A School Management Framework</p>
+  <h1>The <em>Responsible</em> School</h1>
+  <p class="hero-sub">Responsibility is not a student behavior problem. It is a whole-institution commitment — shared by every tier, at every level, every day.</p>
+  <p class="hero-author">Developed by Michael Entrekin</p>
+  <div class="tier-strip">
+    <div class="tier-cell">
+      <span class="tier-label">The Institution</span>
+      <span class="tier-name">The School</span>
+      <span class="tier-desc">Safe environment where learning can flourish</span>
+    </div>
+    <div class="tier-cell">
+      <span class="tier-label">Leadership</span>
+      <span class="tier-name">Administrators</span>
+      <span class="tier-desc">Real-time functioning, safety, and culture</span>
+    </div>
+    <div class="tier-cell">
+      <span class="tier-label">The Classroom</span>
+      <span class="tier-name">Teachers</span>
+      <span class="tier-desc">Modeling respect, rigor, and relationship</span>
+    </div>
+    <div class="tier-cell">
+      <span class="tier-label">The Learner</span>
+      <span class="tier-name">Students</span>
+      <span class="tier-desc">Ownership of regulation, motivation, and behavior</span>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <span class="section-eyebrow">Section 1 — Framework Overview</span>
+  <h2>One school. <em>Shared responsibility.</em></h2>
+  <p class="lead">The Responsible School is built on a single organizing principle: responsibility belongs to everyone, not only to students.</p>
+  <p>Every tier — the institution, its administrators, its teachers, and its students — carries a distinct set of obligations. When each fulfills its own, the conditions for safe, rigorous, and human learning emerge naturally. When any tier fails, the weight falls unfairly on those below it.</p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="card-num">The School</span>
+      <h4>Provide the conditions</h4>
+      <p>A safe, structured environment in which learning, growth, and responsibility can flourish for all members of the community.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">Administrators</span>
+      <h4>Sustain them daily</h4>
+      <p>Maintain real-time functioning, physical safety, and relational culture — and model the institutional values they expect from every adult in the building.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">Teachers</span>
+      <h4>Demonstrate them in practice</h4>
+      <p>Model respect, rigor, and relationship — understanding that what they demonstrate in every interaction is the curriculum students are actually receiving.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">Students</span>
+      <h4>Take ownership of themselves</h4>
+      <p>Develop responsibility to self, to others, and to the learning community they are part of — as a capacity built through experience, not demanded in advance.</p>
+    </div>
+  </div>
+
+  <div class="principle">
+    <strong>Core Principle</strong>
+    Bronfenbrenner (1979) demonstrated that proximal environments shape development more powerfully than individual traits. Schools that demand student responsibility without first providing its structural conditions have inverted the logic of accountability.
+  </div>
+
+  <h3>Three Dimensions of Student Responsibility</h3>
+  <p>Student responsibility is not a single demand. It unfolds across three dimensions, each reflecting a different relational orientation that develops over time.</p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="card-num">01 — Internal</span>
+      <h4>Responsibility to Self</h4>
+      <p>Self-regulation, motivation, effort, and honest self-assessment. The student who is responsible to self does not wait for external management.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">02 — Relational</span>
+      <h4>Responsibility to Others</h4>
+      <p>Respect, empathy, and consideration for the experience of peers and adults. Understanding that behavior has impact beyond oneself.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">03 — Collective</span>
+      <h4>Responsibility to Community</h4>
+      <p>Investment in the shared environment and culture of the school — protecting the conditions that make learning possible for everyone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- THE SCHOOL -->
+<section id="school">
+  <span class="section-eyebrow">Section 2 — The Institution</span>
+  <h2>The School's <em>Responsibility</em></h2>
+  <p class="lead">Before any student can be held responsible for their behavior, the school itself must meet its foundational obligations.</p>
+  <p>A school that is structurally unsafe, inconsistently managed, or culturally incoherent cannot expect students or staff to function at their best. The institution's responsibility comes first — upstream of everything else. Research in ecological systems theory (Bronfenbrenner, 1979) and school climate research (Cohen et al., 2009) consistently shows that the structural and relational environment of a school is the single most powerful predictor of student behavior, staff retention, and academic outcomes.</p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="card-num">01</span>
+      <h4>Physical &amp; Psychological Safety</h4>
+      <p>Not merely the absence of violence — the presence of conditions in which the nervous system can move from threat-detection to learning.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">02</span>
+      <h4>Structural Clarity &amp; Consistency</h4>
+      <p>Inconsistency — more than strictness or permissiveness — produces student confusion and behavioral deterioration. Consistency is fairness made structural.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">03</span>
+      <h4>Equitable Access to Learning</h4>
+      <p>All students — regardless of ability, background, or behavioral history — must have genuine access to rigorous, meaningful instruction.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">04</span>
+      <h4>A Culture That Reflects Stated Values</h4>
+      <p>A school's culture is what it does repeatedly, not what it posts on banners. Lived practice must be consistent with stated values.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">05</span>
+      <h4>Tiered Support Structures</h4>
+      <p>Academic, behavioral, emotional, and developmental support for students who need more than the standard environment offers.</p>
+    </div>
+  </div>
+
+  <span class="strat-strip-label">In Practice — The School</span>
+  <div class="strat-strip">
+    <div class="sc">
+      <span class="sc-num">01</span>
+      <h4>Audit discipline data by subgroup</h4>
+      <p>Disaggregate referrals and suspensions by race, disability status, and grade. Disparities are structural problems — not student problems.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">02</span>
+      <h4>Make expectations visible and teachable</h4>
+      <p>Post behavioral expectations in plain language in every space — and teach them explicitly at the start of the year, not just in a handbook.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">03</span>
+      <h4>Build tiered support into the schedule</h4>
+      <p>Designate protected time for Tier 2 and Tier 3 support so students in crisis aren't pulled from core instruction — they're supported alongside it.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">04</span>
+      <h4>Survey staff climate — and act</h4>
+      <p>A school that surveys staff and does nothing teaches adults the same lesson it teaches students: your voice doesn't matter here.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">05</span>
+      <h4>Name your values and live them</h4>
+      <p>Culture is not what's on the banner. Review policies, hiring practices, and discipline procedures annually against your stated values.</p>
+    </div>
+  </div>
+
+  <div class="principle">
+    <strong>Institutional Logic</strong>
+    Cohen et al. (2009) found school climate is the strongest school-level predictor of student behavior — stronger than any specific intervention. Chronic behavioral problems are institutional data, not just individual data.
+  </div>
+</section>
+
+<!-- ADMINISTRATORS -->
+<section id="admin">
+  <span class="section-eyebrow">Section 3 — Leadership</span>
+  <h2>The Administrator's <em>Responsibility</em></h2>
+  <p class="lead">Administrators are the connective tissue between what the school says it stands for and what actually happens in hallways, classrooms, and crisis moments.</p>
+  <p>Research on instructional leadership (Robinson et al., 2008) consistently identifies the principal's visible, daily engagement with teaching, learning, and culture as the most powerful school-level variable in student outcomes. Administrators who manage from a distance cannot sustain the cultural conditions the Responsible School requires. They cannot demand from teachers what they do not demonstrate themselves.</p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="card-num">Domain 1</span>
+      <h4>Real-Time Functioning</h4>
+      <p>Schedules that run, crises responded to promptly, a building in which teachers can teach without preventable disruption. Operational breakdown is a direct message about institutional seriousness.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">Domain 2</span>
+      <h4>Safety &amp; Crisis Response</h4>
+      <p>An administrator's response in a crisis — the speed, the calm, the clarity, the follow-through — defines the school's safety culture more than any policy document.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">Domain 3</span>
+      <h4>Culture &amp; Modeling</h4>
+      <p>Culture is what leaders do when they think no one is watching. The school's culture is the administrator's behavior, accumulated over time.</p>
+    </div>
+  </div>
+
+  <blockquote>"I looked into what you brought to me. Here's what happened."</blockquote>
+  <p>Nothing erodes school culture faster than administrative inconsistency. When a teacher reports a behavioral issue and hears nothing back, the message is clear: the administration does not prioritize what teachers face. Follow-through is culture — every time, without exception.</p>
+
+  <span class="strat-strip-label">In Practice — Administrators</span>
+  <div class="strat-strip">
+    <div class="sc">
+      <span class="sc-num">01</span>
+      <h4>Do three classroom walkthroughs a day</h4>
+      <p>Not evaluative — relational. Five minutes in three classrooms signals that instruction matters and you're paying close attention.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">02</span>
+      <h4>Close the loop on every staff referral</h4>
+      <p>When a teacher brings a concern, respond — even if the answer is "I'm still working on it." Silence reads as indifference every time.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">03</span>
+      <h4>Eat lunch in the cafeteria weekly</h4>
+      <p>Visible presence during unstructured time communicates that you know and care about the full school day — not just the manageable parts.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">04</span>
+      <h4>Debrief incidents with the teacher</h4>
+      <p>After a disciplinary event, check in: what do they need? What context do they have? The teacher is a stakeholder in every outcome.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">05</span>
+      <h4>Model emotional regulation publicly</h4>
+      <p>"I need a moment before I respond." Staff and students are watching how you handle pressure — that's the standard you're setting.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">06</span>
+      <h4>Protect teacher planning time fiercely</h4>
+      <p>Every meeting scheduled during prep time is a statement about what you value. Guard instructional capacity as a structural priority.</p>
+    </div>
+  </div>
+
+  <div class="principle">
+    <strong>The Modeling Standard</strong>
+    Bandura (1977) established that children acquire behavioral standards primarily through observational learning. Every administrative response — composed or reactive, fair or arbitrary — is a live demonstration of the standard the school is building.
+  </div>
+</section>
+
+<!-- TEACHERS -->
+<section id="teachers">
+  <span class="section-eyebrow">Section 4 — The Classroom</span>
+  <h2>The Teacher's <em>Responsibility</em></h2>
+  <p class="lead">The teacher is the most proximate adult in a student's school day. What they model is the actual curriculum students are receiving, regardless of what the lesson plan says.</p>
+  <p>Bandura's social learning theory (1977) demonstrates that children acquire behavior primarily through observational learning — watching trusted adults navigate real situations in real time. A teacher who models calm authority, genuine intellectual curiosity, respectful disagreement, and recovery from error is teaching far more than their content area. Teacher responsibility in the Responsible School is organized around three domains: <strong>respect, rigor, and relationship.</strong></p>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="openTab('respect', event)">Modeling Respect</button>
+    <button class="tab-btn" onclick="openTab('rigor', event)">Modeling Rigor</button>
+    <button class="tab-btn" onclick="openTab('relationship', event)">Modeling Relationship</button>
+  </div>
+  <div class="tab-panels">
+    <div class="tab-panel active" id="tab-respect">
+      <p>Respect is an active, consistent, visible practice — addressing students by name, taking their questions seriously, disagreeing with behavior without dismissing dignity, and maintaining warmth toward students who have been difficult to like.</p>
+      <h4>Name the student — not the behavior</h4>
+      <p>In correction, address the student as a person first. The behavior is corrected; the child is not defined by it.</p>
+      <blockquote>"Marcus, that's not how we do things here. I know you can do better."</blockquote>
+      <h4>Model respectful disagreement</h4>
+      <p>When students challenge rules, respond with the same level of respect you'd expect from them. Students learn how to disagree respectfully by watching adults do it — or fail to.</p>
+      <h4>Recover from your own mistakes publicly</h4>
+      <p>When a teacher acknowledges an error or apologizes to a student they've been unfair to, they model exactly the responsibility they are trying to build. This is not weakness — it is the most powerful modeling in the classroom.</p>
+    </div>
+    <div class="tab-panel" id="tab-rigor">
+      <p>Rigor is not difficulty for its own sake. It is the teacher's visible belief that students are capable of more than they currently demonstrate. Low expectations are not kind — they communicate that the teacher does not believe the student is worth genuine intellectual demand.</p>
+      <h4>Hold the expectation — and stay</h4>
+      <p>When a student refuses work or produces minimal effort, accepting it is not compassion. It is a vote against the student's potential.</p>
+      <blockquote>"This isn't your best. I know what your best looks like. Let's do this again."</blockquote>
+      <h4>Make thinking visible</h4>
+      <p>Model intellectual struggle out loud — including getting stuck, revising, and correcting. This demonstrates that effort and confusion are part of competence, not evidence against it.</p>
+      <h4>Don't rescue — scaffold</h4>
+      <p>Reducing cognitive demand (rescuing) is not the same as providing structural support to meet the original demand (scaffolding). Rigor requires knowing the difference and choosing accordingly.</p>
+    </div>
+    <div class="tab-panel" id="tab-relationship">
+      <p>Relationship is not a precondition for instruction — it is instruction's most essential substrate. Students who do not trust their teacher cannot take the academic and behavioral risks that learning requires.</p>
+      <h4>Invest disproportionately in the hardest students</h4>
+      <p>The students most difficult to like are almost always the students most in need of relationship. The teacher-student relationship is the most powerful protective factor for at-risk students — more than any program or intervention.</p>
+      <h4>Repair after conflict</h4>
+      <p>Follow up privately after a difficult moment — not to re-litigate, but to reconnect. The relationship is more durable than any single event.</p>
+      <blockquote>"Yesterday was hard. I want you to know — we're good. I still believe in you."</blockquote>
+      <h4>Be consistently warm, not occasionally warm</h4>
+      <p>Warmth that students can only access when they behave is not a relationship — it is a reward system. Consistent warmth, available even after failure, is the relational foundation that makes everything else work.</p>
+    </div>
+  </div>
+
+  <p><strong>Hattie (2009)</strong> identifies the teacher-student relationship as one of the highest-effect variables in all of schooling (effect size 0.72). Rosenthal &amp; Jacobson (1968) demonstrated that teacher expectations directly shape student performance. Rigor is not a teaching strategy — it is an act of belief.</p>
+
+  <span class="strat-strip-label">In Practice — Teachers</span>
+  <div class="strat-strip">
+    <div class="sc">
+      <span class="sc-num">01</span>
+      <h4>Greet every student at the door by name</h4>
+      <p>Two seconds of intentional acknowledgment at the threshold sets a relational tone that carries through the entire period.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">02</span>
+      <h4>Think aloud when you're stuck</h4>
+      <p>"I'm not sure how to approach this — let me think it through." Modeling intellectual struggle normalizes effort and demystifies expertise.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">03</span>
+      <h4>Correct the behavior, restore the relationship</h4>
+      <p>After a public correction, find a private moment: "We're good — I still expect great things from you." The relationship outlasts the incident.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">04</span>
+      <h4>Notice the student who isn't acting out</h4>
+      <p>Withdrawn, disengaged, quietly failing — these students need relational investment just as urgently. They're just harder to see.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">05</span>
+      <h4>Apologize when you get it wrong</h4>
+      <p>"I was unfair to you this morning. I'm sorry." Said publicly when warranted, this is the most powerful modeling of responsibility in the room.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">06</span>
+      <h4>Hold the standard — and scaffold to it</h4>
+      <p>Don't lower the expectation when a student struggles. Break the path into smaller steps and stay alongside them. That's rigor with relationship.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">07</span>
+      <h4>Give feedback on effort, not just outcome</h4>
+      <p>Dweck (2006) shows that process praise builds durable motivation. "You revised this three times — that's what growth looks like."</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- STUDENTS -->
+<section id="students">
+  <span class="section-eyebrow">Section 5 — The Learner</span>
+  <h2>The Student's <em>Responsibility</em></h2>
+  <p class="lead">Student responsibility is the visible outcome of everything the school, its administrators, and its teachers have built. It is not a precondition for those things — it is their result.</p>
+  <p>Self-determination theory (Ryan &amp; Deci, 2000) identifies autonomy, competence, and relatedness as the three psychological needs whose satisfaction produces intrinsic motivation. These needs are not met through reward systems or behavior matrices. They are met through environments in which students experience genuine agency, believe they are capable, and feel they belong.</p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="card-num">To Self</span>
+      <h4>Self-Regulation &amp; Intrinsic Motivation</h4>
+      <p>Managing internal states, initiating effort without prompting, assessing one's own work honestly, and seeking help as an act of self-responsibility — not weakness.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">To Others</span>
+      <h4>Respect, Empathy &amp; Repair</h4>
+      <p>Treating peers with dignity, acknowledging impact, navigating conflict without escalation, and repairing — not merely apologizing — when behavior has caused harm.</p>
+    </div>
+    <div class="card">
+      <span class="card-num">To Community</span>
+      <h4>Protecting Shared Conditions</h4>
+      <p>Following norms because they serve the community (not to avoid consequences), contributing actively to the learning environment, and speaking up when something is wrong.</p>
+    </div>
+  </div>
+
+
+  <span class="strat-strip-label">In Practice — Students</span>
+  <div class="strat-strip">
+    <div class="sc">
+      <span class="sc-num">01</span>
+      <h4>Name your state before you react</h4>
+      <p>Practice a one-sentence check-in: "I'm feeling ___ right now." Naming the emotion activates the prefrontal cortex and creates a pause before behavior.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">02</span>
+      <h4>Ask for help as a skill, not a rescue</h4>
+      <p>"I've tried two approaches and I'm stuck — can you point me toward what to try next?" That's self-responsible, not dependent.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">03</span>
+      <h4>Own the repair, not just the apology</h4>
+      <p>An apology acknowledges harm. A repair addresses it: "What do I need to do differently?" Students who repair relationships build trust — not just guilt.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">04</span>
+      <h4>Invest in the classroom even when it's hard</h4>
+      <p>Community is protected by everyone in it. Disengagement has impact. Participation is responsibility — not compliance.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">05</span>
+      <h4>Assess your own work before submitting</h4>
+      <p>Ask: "Is this my best effort?" Honest self-assessment is a skill — it reduces dependence on external evaluation and builds intrinsic standards.</p>
+    </div>
+    <div class="sc">
+      <span class="sc-num">06</span>
+      <h4>Speak up when something is wrong</h4>
+      <p>Responsibility to community means acting on what you see — not just tolerating it. That takes courage and is worth teaching explicitly.</p>
+    </div>
+  </div>
+
+  <div class="principle">
+    <strong>Developmental, Not Punitive</strong>
+    Siegel (2012) shows self-regulation is built through co-regulation with attuned adults — not a capacity children either arrive with or lack. Ryan &amp; Deci (2000) confirm that external control systems undermine the very motivation they aim to produce.
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section id="matrix">
+  <span class="section-eyebrow">Section 6 — Shared Dimensions</span>
+  <h2>Responsibility <em>Across All Four Tiers</em></h2>
+  <p class="lead">Each member of the school community carries responsibility across four dimensions. When these are named clearly at every tier, responsibility stops being something demanded only of students.</p>
+
+  <table class="matrix">
+    <thead>
+      <tr>
+        <th>Tier</th>
+        <th>To Self</th>
+        <th>To Others</th>
+        <th>To Culture</th>
+        <th>To Community</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tier-tag">The School</span></td>
+        <td>Institutional integrity — policies that match stated values</td>
+        <td>Dignity for every person within its walls; accessible, fair processes</td>
+        <td>Building and sustaining a coherent, consistent culture</td>
+        <td>Transparent accountability to families and public trust</td>
+      </tr>
+      <tr>
+        <td><span class="tier-tag">Admini­strators</span></td>
+        <td>Personal regulation and continued professional growth</td>
+        <td>Treating staff, students, and families as partners — not subordinates</td>
+        <td>Stewarding culture through daily visibility and follow-through</td>
+        <td>Ethical stewardship of public resources and honest representation of outcomes</td>
+      </tr>
+      <tr>
+        <td><span class="tier-tag">Teachers</span></td>
+        <td>Professional identity and honest self-assessment of instruction</td>
+        <td>Consistent warmth and respectful correction for every student</td>
+        <td>Shaping classroom culture through what they permit and model</td>
+        <td>Honest family communication and upholding professional ethics</td>
+      </tr>
+      <tr>
+        <td><span class="tier-tag">Students</span></td>
+        <td>Self-regulation, intrinsic motivation, and honest self-assessment</td>
+        <td>Treating peers with dignity; acknowledging and repairing harm</td>
+        <td>Following shared norms because they serve the community</td>
+        <td>Understanding that education is a civic act with civic obligations</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <span class="section-eyebrow">Section 7 — Research Foundation</span>
+  <h2>The Research <em>Foundation</em></h2>
+  <p class="lead">Six research traditions, taken together, describe the conditions under which responsibility is developed rather than merely demanded.</p>
+
+  <ul class="research-list">
+    <li>
+      <span class="research-author">Bronfenbrenner<br>1979</span>
+      <div class="research-text"><strong>Ecological Systems Theory.</strong> Proximal environments — the daily microsystems a child inhabits — shape development more powerfully than any individual trait. Schools cannot demand developmental outcomes they have not provided developmental conditions for.</div>
+    </li>
+    <li>
+      <span class="research-author">Bandura<br>1977</span>
+      <div class="research-text"><strong>Social Learning Theory.</strong> Behavior, values, and standards of conduct are acquired primarily through observation of significant models. In a school, the most significant models are adults — and what they do carries more weight than anything they say.</div>
+    </li>
+    <li>
+      <span class="research-author">Ryan &amp; Deci<br>2000</span>
+      <div class="research-text"><strong>Self-Determination Theory.</strong> Intrinsic motivation is produced by the satisfaction of three basic psychological needs: autonomy, competence, and relatedness. External reward systems address none of these. The Responsible School builds conditions that meet all three structurally.</div>
+    </li>
+    <li>
+      <span class="research-author">Cohen et al.<br>2009</span>
+      <div class="research-text"><strong>School Climate Research.</strong> Positive school climate is the single strongest school-level predictor of student achievement, behavioral outcomes, and long-term educational attainment — stronger than any specific instructional program or behavioral intervention.</div>
+    </li>
+    <li>
+      <span class="research-author">Bryk &amp; Schneider<br>2002</span>
+      <div class="research-text"><strong>Relational Trust.</strong> Schools with high relational trust showed significantly greater gains in student achievement and far greater capacity for meaningful change. The Responsible School builds relational trust by making explicit what each tier is responsible for — and then holding each accountable for fulfilling it.</div>
+    </li>
+    <li>
+      <span class="research-author">Baumrind / Walker<br>1966 / 2009</span>
+      <div class="research-text"><strong>Authoritative Adult Practice.</strong> Adults who combine high warmth with high expectations consistently produce the strongest outcomes for student self-regulation, prosocial behavior, and academic engagement. This is the behavioral posture the Responsible School requires at every tier.</div>
+    </li>
+    <li>
+      <span class="research-author">Dreikurs &amp; Grey<br>1968</span>
+      <div class="research-text"><strong>Natural and Logical Consequences.</strong> Dreikurs argued that punishment teaches children to fear external authority, while consequences teach them to think. A <em>natural consequence</em> flows directly from the behavior itself — leaving a coat at home means being cold. A <em>logical consequence</em> is designed by adults to be related, respectful, and reasonable — a student who misuses materials loses access to them. The Responsible School applies this distinction consistently: consequences are connected to behavior and experienced as fair, not arbitrary. This builds genuine accountability rather than compliance driven by threat.</div>
+    </li>
+  </ul>
+
+  <h3>Selected References</h3>
+  <ul class="refs-list">
+    <li>Bandura, A. (1977). <em>Social learning theory.</em> Prentice Hall.</li>
+    <li>Baumrind, D. (1966). <em>Child Development, 37</em>(4), 887–907.</li>
+    <li>Bronfenbrenner, U. (1979). <em>The ecology of human development.</em> Harvard University Press.</li>
+    <li>Bryk, A. S., &amp; Schneider, B. (2002). <em>Trust in schools.</em> Russell Sage Foundation.</li>
+    <li>Cohen, J., et al. (2009). <em>Teachers College Record, 111</em>(1), 180–213.</li>
+    <li>Deci, E. L., et al. (1999). <em>Psychological Bulletin, 125</em>(6), 627–668.</li>
+    <li>Dreikurs, R., &amp; Grey, L. (1968). <em>Logical consequences: A new approach to discipline.</em> Meredith Press.</li>
+    <li>Dweck, C. S. (2006). <em>Mindset.</em> Random House.</li>
+    <li>Hattie, J. (2009). <em>Visible learning.</em> Routledge.</li>
+    <li>Hattie, J., &amp; Timperley, H. (2007). <em>Review of Educational Research, 77</em>(1), 81–112.</li>
+    <li>Leithwood, K., et al. (2004). <em>How leadership influences student learning.</em> Wallace Foundation.</li>
+    <li>Pianta, R. C. (1999). <em>Enhancing relationships between children and teachers.</em> APA.</li>
+    <li>Porges, S. W. (2011). <em>The polyvagal theory.</em> W.W. Norton.</li>
+    <li>Robinson, V. M. J., et al. (2008). <em>Educational Administration Quarterly, 44</em>(5), 635–674.</li>
+    <li>Rosenthal, R., &amp; Jacobson, L. (1968). <em>Pygmalion in the classroom.</em> Holt, Rinehart &amp; Winston.</li>
+    <li>Ryan, R. M., &amp; Deci, E. L. (2000). <em>American Psychologist, 55</em>(1), 68–78.</li>
+    <li>Siegel, D. J. (2012). <em>The developing mind</em> (2nd ed.). Guilford Press.</li>
+    <li>Thapa, A., et al. (2013). <em>Review of Educational Research, 83</em>(3), 357–385.</li>
+    <li>Walker, J. M. T. (2009). <em>Theory Into Practice, 48</em>(2), 122–129.</li>
+  </ul>
+</section>
+
+<footer>
+  <strong>The Responsible School</strong> — A School Management Framework<br>
+  Developed by Michael Entrekin
+</footer>
+
+<script>
+  function openTab(name, e) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    e.target.classList.add('active');
+  }
+
+  function filterCards(tier, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cards = document.querySelectorAll('.strat-card');
+    cards.forEach(card => {
+      if (tier === 'all' || card.dataset.tier === tier) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    document.getElementById('stratTrack').scrollLeft = 0;
+  }
+</script>
+
+</body>
+</html>
